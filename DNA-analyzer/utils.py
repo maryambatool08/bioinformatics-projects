@@ -7,7 +7,7 @@ def validate_sequence(seq):
     valid_bases = set("ATGCN")
     for position , base in enumerate(seq, start=1):
         if base not in valid_bases:
-            raise ValueError(f"Invalid base '{base}' at position {position}")
+            raise ValueError(f"Invalid base '{base}' at position {position}.")
     return seq
 
 if __name__ == "__main__":
