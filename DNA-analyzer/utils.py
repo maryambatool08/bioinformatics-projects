@@ -41,14 +41,36 @@ def gc_content_window(seq, window_size):
 
     return results
 
+def find_motif(seq, motif):
+    motif = motif.upper()
+    motif_length = len(motif)
+    positions = []
+
+    for i in range(len(seq) - motif_length +1):
+        window = seq[i: i + motif_length]
+
+        match = True
+        for window_char , motif_char in zip(window, motif):
+            if motif_char != "N" and window_char != motif_char:
+                match = False
+                break
+        if match:
+            positions.append(i + 1)
+
+    return positions
+    
+
+         
 if __name__ == "__main__":
     for test_seq in ["atgc", "  gc at gc", "ATXGC", ""]:
         try:
             print(validate_sequence(test_seq))
         except ValueError as e:
-            print (f"Error: {e}")
+            print(f"Error: {e}")
 
-            print(count_bases("ATGCGCTAGC"))
-            print(count_bases(""))
-            print(gc_content("ATGCTGCG"))
-            print(gc_content_window("ATGCGATCGATCGATCGTAGCTAGCTAGCTAGGCTAACGATCG",5))
+    print(count_bases("ATGCGCTAGC"))
+    print(count_bases(""))
+    print(gc_content("ATGCTGCG"))
+    print(gc_content_window("ATGCGATCGATCGATCGTAGCTAGCTAGCTAGGCTAACGATCG",5))
+    print(find_motif("ATGCGCCCGCTATGCGGCCGCC", "ATG"))
+    print(find_motif("ATGC", "ANG"))
