@@ -58,8 +58,40 @@ def find_motif(seq, motif):
             positions.append(i + 1)
 
     return positions
-    
 
+def reverse_complement(seq):
+    complement_dict = {"A": "T", "T": "A", "G": "C", "C": "G", "N": "N"}
+    reverse_seq = seq[::-1]
+
+    result = "" 
+    for base in reverse_seq:
+        result += complement_dict[base]
+
+    return result
+
+def melting_temp(seq):
+    counts = count_bases(seq)
+    at_count = counts["A"] + counts["T"]
+    gc_count = counts["G"] + counts["C"]
+    tm = 2 * at_count + 4 * gc_count
+    return tm
+
+def restriction_sites(seq):
+    sites = {
+        "EcoRI": "GAATTC",
+        "BamHI" : "GGATCC",
+        "HindIII" : "AAGCTT",
+        "NotI": "GCGGCCGC",
+        "PstI": "CTGCAG",
+    }
+    results = {}
+    for enzyme, pattern in sites.items(): 
+        positions = find_motif(seq, pattern)
+        if positions:
+            results[enzyme] = positions
+
+    return results
+    
          
 if __name__ == "__main__":
     for test_seq in ["atgc", "  gc at gc", "ATXGC", ""]:
@@ -74,3 +106,6 @@ if __name__ == "__main__":
     print(gc_content_window("ATGCGATCGATCGATCGTAGCTAGCTAGCTAGGCTAACGATCG",5))
     print(find_motif("ATGCGCCCGCTATGCGGCCGCC", "ATG"))
     print(find_motif("ATGC", "ANG"))
+    print(reverse_complement("ATGC"))
+    print(melting_temp("GCGCGCATGC"))
+    print(restriction_sites("AAAGAATTCAAAGGATCCAAA"))
