@@ -91,6 +91,21 @@ def restriction_sites(seq):
             results[enzyme] = positions
 
     return results
+
+def read_fasta(filepath):
+    with open(filepath, "r") as f:
+        lines = f.readlines()
+
+    if len(lines) == 0:
+        raise ValueError("File is empty.")
+
+    if not lines[0].startswith(">"):
+        raise ValueError("The fasta file is not valid.")
+
+    header = lines[0][1:].strip()
+    sequence = "".join(lines[1:]).replace("\n", "").upper()
+
+    return header, sequence
     
          
 if __name__ == "__main__":
@@ -109,3 +124,5 @@ if __name__ == "__main__":
     print(reverse_complement("ATGC"))
     print(melting_temp("GCGCGCATGC"))
     print(restriction_sites("AAAGAATTCAAAGGATCCAAA"))
+    header, seq = read_fasta("sample.fasta")
+    print(f"Header: {header}\nSequence: {seq}")

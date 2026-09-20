@@ -7,6 +7,7 @@ from utils import (
     reverse_complement,
     melting_temp,
     restriction_sites,
+    read_fasta,
 )
 
 def show_menu():
@@ -25,7 +26,18 @@ def show_menu():
 show_menu()
 
 def main():
-    seq = input("Enter DNA sequence: ")
+    user_input = input("Enter DNA sequence or FASTA file name: ").strip()
+
+    if user_input.lower().endswith((".fasta", ".fa")):
+        try:
+            header, seq = read_fasta(user_input)
+            print(f"Loaded: {header}")
+        except FileNotFoundError:
+            print(f"ERROR: File not found: {user_input}")
+            return
+    else:
+        seq = user_input
+    
     try:
         seq = validate_sequence(seq)
     except ValueError as e:
